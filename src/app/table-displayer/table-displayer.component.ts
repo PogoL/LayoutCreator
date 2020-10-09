@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./table-displayer.component.css']
 })
 export class TableDisplayerComponent implements OnInit {
-
+  
   constructor() { }
 
   ngOnInit(): void {
