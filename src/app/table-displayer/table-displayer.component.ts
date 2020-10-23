@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { TableModel } from '../table.model';
 
 @Component({
@@ -9,24 +9,30 @@ import { TableModel } from '../table.model';
 export class TableDisplayerComponent implements OnInit {
   
   table: TableModel = new TableModel(4,5);
-  
-  constructor() { }
+  selectedCells: {idWidth: number, idHeight: number}[] = [];
+
+  constructor(private renderer: Renderer2) { }
 
   ngOnInit(): void {
-    let divTable = document.getElementById("divTable");
-    let table = document.createElement("table");
-    for (let idH = 0; idH < this.table.height; idH++) {
-      let tr = document.createElement("tr");
-      for (let idW = 0; idW < this.table.width; idW++) {
-        let td = document.createElement("td");
-        td.setAttribute('class', 'empty-cell');
-        tr.appendChild(td);
-      }
-      table.appendChild(tr);
-    }
-
-    divTable.appendChild(table);
   }
 
+  toggleSelectCell(idH: number, idW: number, event) {
+    let idSelected = this.selectedCells.findIndex(c => c.idHeight == idH && c.idWidth == idW);
+    if (idSelected != -1) {
+      this.selectedCells.splice(idSelected,1);
+    } else {
+      this.selectedCells.push({idHeight: idH, idWidth: idW});
+    }
+    console.table(this.selectedCells);
+    this.toggleClass(event);
+  }
 
+  toggleClass(event): void {
+    const hasClass = event.target.classList.contains('selected-cell');
+    if(hasClass) {
+      this.renderer.removeClass(event.target, 'selected-cell');
+    } else {
+      this.renderer.addClass(event.target, 'selected-cell');
+    }
+  }
 }

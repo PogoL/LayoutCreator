@@ -1,14 +1,14 @@
 <div class="col-xs-5" id="divTable">
-
+    <table>
+        <tr *ngFor="let row of [].constructor(table.height); let idHeight=index;">
+            <td *ngFor="let cell of [].constructor(table.width); let idWidth=index;"
+                class="empty-cell"
+                id="td{{idHeight}}{{idWidth}}"
+                (click)="toggleSelectCell(idHeight, idWidth, $event)">
+            </td>
+        </tr>
+    </table>
 </div>
-
-<!-- <table>
-    <tr *ngFor="let row of [].constructor(table.height)">
-        <td *ngFor="let cell of [].constructor(table.width)">
-
-        </td>
-    </tr>
-</table> -->
 
 <button class="btn btn-primary">Merge selected cells</button>
 <button class="btn btn-primary">Split selected cells</button>
