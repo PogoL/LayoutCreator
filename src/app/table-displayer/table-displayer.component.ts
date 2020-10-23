@@ -23,7 +23,6 @@ export class TableDisplayerComponent implements OnInit {
     } else {
       this.selectedCells.push({idHeight: idH, idWidth: idW});
     }
-    console.table(this.selectedCells);
     this.toggleClass(event);
   }
 
@@ -45,10 +44,7 @@ export class TableDisplayerComponent implements OnInit {
         return a.idHeight > b.idHeight ? 1 : -1;
       });
     
-    console.table(this.selectedCells);
-    
-
-    let importantCell = document.getElementById('td'+this.selectedCells[0].idHeight+this.selectedCells[0].idWidth);
+    let importantCell = this.getCellByIds(this.selectedCells[0].idHeight, this.selectedCells[0].idWidth);
     let firstCell = this.selectedCells[0];
     let lastCell = this.selectedCells[this.selectedCells.length-1];
     let rowspan = Math.abs(firstCell.idHeight-lastCell.idHeight) + 1;
@@ -70,7 +66,42 @@ export class TableDisplayerComponent implements OnInit {
       el.classList.remove(className);
     });
     elems.forEach((el) => {
-      if (el !== elems[0]) el.remove();
+      if (el !== elems[0]) el.setAttribute('style', 'display:none');
     });
+  }
+
+  splitCell(): void {
+    if (this.selectedCells.length > 1) {
+      alert("split only one cell plz");
+      return;
+    }
+    let cell = this.selectedCells[0];
+
+    let cellDOM = this.getCellByIds(cell.idHeight, cell.idWidth);
+    
+    const colspan = cellDOM.getAttribute('colspan');
+    for (let idW = 1; idW < parseInt(colspan); idW++) {
+      let cellToDisplay = this.getCellByIds(cell.idHeight, cell.idWidth+idW);
+      cellToDisplay.setAttribute('style', '');
+    }
+    cellDOM.removeAttribute('colspan');
+    
+    const rowspan = cellDOM.getAttribute('rowspan');
+    for (let idH = 1; idH < parseInt(rowspan); idH++) {
+      let cellToDisplay = this.getCellByIds(cell.idHeight + idH, cell.idWidth);
+      cellToDisplay.setAttribute('style', '');
+
+    }
+    cellDOM.removeAttribute('rowspan');
+
+
+    
+    
+    this.removeElementsByClass('selected-cell');
+    this.selectedCells = [];
+  }
+
+  getCellByIds(height: number, width: number) {
+    return document.getElementById('td'+height+width);
   }
 }
