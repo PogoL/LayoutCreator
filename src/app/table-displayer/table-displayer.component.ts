@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Renderer2 } from '@angular/core';
+import { Connect } from '../connect.service';
 import { TableModel } from '../table.model';
 
 @Component({
@@ -11,7 +12,7 @@ export class TableDisplayerComponent implements OnInit {
   table: TableModel = new TableModel(4,5);
   selectedCells: {idWidth: number, idHeight: number}[] = [];
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2, private connector: Connect) { }
 
   ngOnInit(): void {
   }
@@ -103,5 +104,11 @@ export class TableDisplayerComponent implements OnInit {
 
   getCellByIds(height: number, width: number) {
     return document.getElementById('td'+height+width);
+  }
+
+
+
+  generateCodeClicked() {
+    this.connector.generateCode.emit();
   }
 }

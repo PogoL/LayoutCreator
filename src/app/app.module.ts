@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { TableDisplayerComponent } from './table-displayer/table-displayer.component';
 import { CodeDisplayerComponent } from './code-displayer/code-displayer.component';
+import { Connect } from './connect.service';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,7 @@ import { CodeDisplayerComponent } from './code-displayer/code-displayer.componen
   imports: [
     BrowserModule
   ],
-  providers: [],
+  providers: [Connect],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
