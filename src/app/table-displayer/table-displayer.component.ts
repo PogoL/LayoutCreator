@@ -81,23 +81,30 @@ export class TableDisplayerComponent implements OnInit {
     let cellDOM = this.getCellByIds(cell.idHeight, cell.idWidth);
     
     const colspan = cellDOM.getAttribute('colspan');
-    for (let idW = 1; idW < parseInt(colspan); idW++) {
-      let cellToDisplay = this.getCellByIds(cell.idHeight, cell.idWidth+idW);
-      cellToDisplay.setAttribute('style', '');
-    }
-    cellDOM.removeAttribute('colspan');
-    
     const rowspan = cellDOM.getAttribute('rowspan');
-    for (let idH = 1; idH < parseInt(rowspan); idH++) {
-      let cellToDisplay = this.getCellByIds(cell.idHeight + idH, cell.idWidth);
-      cellToDisplay.setAttribute('style', '');
-
+    if (parseInt(colspan) > 0 && parseInt(rowspan) > 0) {
+      for (let idW = 0; idW < parseInt(colspan); idW++) {
+        for (let idH = 0; idH < parseInt(rowspan); idH++) {
+          let cellToDisplay = this.getCellByIds(cell.idHeight + idH, cell.idWidth + idW);
+          cellToDisplay.setAttribute('style', '');
+        }
+      }
+      cellDOM.removeAttribute('colspan');
+      cellDOM.removeAttribute('rowspan');
     }
-    cellDOM.removeAttribute('rowspan');
-
-
-    
-    
+    else {
+      for (let idW = 1; idW < parseInt(colspan); idW++) {
+        let cellToDisplay = this.getCellByIds(cell.idHeight, cell.idWidth+idW);
+        cellToDisplay.setAttribute('style', '');
+      }
+      cellDOM.removeAttribute('colspan');
+      for (let idH = 1; idH < parseInt(rowspan); idH++) {
+        let cellToDisplay = this.getCellByIds(cell.idHeight + idH, cell.idWidth);
+        cellToDisplay.setAttribute('style', '');
+  
+      }
+      cellDOM.removeAttribute('rowspan');
+    }
     this.removeElementsByClass('selected-cell');
     this.selectedCells = [];
   }
